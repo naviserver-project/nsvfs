@@ -1,0 +1,54 @@
+'\"
+'\" Generated from file 'doc/src/mann/nsvfs.man' by tcllib/doctools with format 'nroff'
+'\"
+.so man.macros
+.TH "nsvfs" n 0.1 nsvfs "Tcl VFS File Access"
+.BS
+.SH NAME
+nsvfs \- Replacement commands which use the Tcl VFS for file access.
+.SH SYNOPSIS
+\fBvfs_register_fastpath\fR ?\fB-noinherit\fR? ?\fI--\fR? \fImethod\fR \fIurl\fR
+.sp
+\fBvfs_returnfile\fR \fIsttaus\fR \fImime-type\fR \fIfilepath\fR
+.sp
+\fBvfs_respond\fR ?\fB-status \fIstatus\fR\fR? ?\fB-type \fImime-type\fR\fR? ?\fB-length \fIlength\fR\fR? ?\fB-headers \fIsetid\fR\fR? ?\fB-string \fIbody\fR\fR? ?\fB-binary \fIbody\fR\fR? ?\fB-file \fIfilepath\fR\fR? ?\fB-fileid \fIchannel\fR\fR?
+.sp
+.BE
+.SH DESCRIPTION
+nsvfs provides replacements for the builtin naviserver commands which access the
+file system to serve content. The commands here use the Tcl VFS.
+.PP
+Although slower, this is useful for creating single-file install images, such
+as \fIstarkit\fRs.
+.SH COMMANDS
+.TP
+\fBvfs_register_fastpath\fR ?\fB-noinherit\fR? ?\fI--\fR? \fImethod\fR \fIurl\fR
+A replacement for the \fBns_register_fastpath\fR command, using the Tcl VFS for
+file system access.
+.sp
+To ensure that all static content uses the Tcl VFS, replace the naviserver core
+fastpath handler by running the following code in your tcl library:
+.nf
+
+\fBvfs_register_fastpath\fR GET /*
+\fBvfs_register_fastpath\fR HEAD /*
+\fBvfs_register_fastpath\fR POST /*
+
+.fi
+You may also decide to register the vfs routines for a subset of the URL
+hierarchy, such as /admin/*. In this case you could serve admin pages from
+within the starkit bundle and aditional static pages using the normal
+fastpath handler.
+.TP
+\fBvfs_returnfile\fR \fIsttaus\fR \fImime-type\fR \fIfilepath\fR
+A replacement for the \fBns_returnfile\fR command, using the Tcl VFS for file
+system access. No caching is performed.
+.TP
+\fBvfs_respond\fR ?\fB-status \fIstatus\fR\fR? ?\fB-type \fImime-type\fR\fR? ?\fB-length \fIlength\fR\fR? ?\fB-headers \fIsetid\fR\fR? ?\fB-string \fIbody\fR\fR? ?\fB-binary \fIbody\fR\fR? ?\fB-file \fIfilepath\fR\fR? ?\fB-fileid \fIchannel\fR\fR?
+A replacement for the \fBns_respond\fR command, using the Tcl VFS for file
+system access. No caching is performed.
+.PP
+.SH "SEE ALSO"
+ns_register_fastpath, ns_respond, ns_returnfile
+.SH KEYWORDS
+fastpath, file, vfs

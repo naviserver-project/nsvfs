@@ -1,0 +1,81 @@
+[include version_include.man]
+
+[manpage_begin nsvfs n [vset version]]
+[moddesc {Tcl VFS File Access}]
+[titledesc {Replacement commands which use the Tcl VFS for file access.}]
+
+[description]
+nsvfs provides replacements for the builtin naviserver commands which access the
+file system to serve content. The commands here use the Tcl VFS.
+
+[para]
+Although slower, this is useful for creating single-file install images, such
+as [term starkit]s.
+
+
+[section {COMMANDS}]
+[list_begin definitions]
+
+
+
+[call [cmd vfs_register_fastpath] \
+      [opt [option -noinherit]] \
+      [opt [arg --]] \
+      [arg method] \
+      [arg url]]
+
+A replacement for the [cmd ns_register_fastpath] command, using the Tcl VFS for
+file system access.
+
+[para]
+To ensure that all static content uses the Tcl VFS, replace the naviserver core
+fastpath handler by running the following code in your tcl library:
+
+[example_begin]
+[cmd vfs_register_fastpath] GET /*
+[cmd vfs_register_fastpath] HEAD /*
+[cmd vfs_register_fastpath] POST /*
+[example_end]
+
+You may also decide to register the vfs routines for a subset of the URL
+hierarchy, such as /admin/*. In this case you could serve admin pages from
+within the starkit bundle and aditional static pages using the normal
+fastpath handler.
+
+
+
+
+[call [cmd vfs_returnfile] \
+      [arg sttaus] \
+      [arg mime-type] \
+      [arg filepath] ]
+
+A replacement for the [cmd ns_returnfile] command, using the Tcl VFS for file
+system access. No caching is performed.
+
+
+
+
+[call [cmd vfs_respond] \
+      [opt [option "-status [arg status]"]] \
+      [opt [option "-type [arg mime-type]"]] \
+      [opt [option "-length [arg length]"]] \
+      [opt [option "-headers [arg setid]"]] \
+      [opt [option "-string [arg body]"]] \
+      [opt [option "-binary [arg body]"]] \
+      [opt [option "-file [arg filepath]"]] \
+      [opt [option "-fileid [arg channel]"]] ]
+
+A replacement for the [cmd ns_respond] command, using the Tcl VFS for file
+system access. No caching is performed.
+
+
+[list_end]
+
+
+
+
+[see_also ns_register_fastpath ns_returnfile ns_respond]
+[keywords vfs fastpath file]
+
+[manpage_end]

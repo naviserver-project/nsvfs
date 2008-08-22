@@ -1,0 +1,8 @@
+
+* Add ADP support.
+
+  Need to add vfs_register_adp, vfs_adp_include etc.  This will require some
+  adjustments to the naviserver core to allow a Tcl channel to be passed to the
+  ADP parsing routines, or something simillar...
+
+  The ADP code has used native OS file routines for some time.

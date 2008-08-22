@@ -1,0 +1,14 @@
+
+This is the nsvfs module for naviserver. It provides some replacement naviserver
+routines which use the Tcl VFS to access the file system rather than the native
+OS routines.
+
+The advantage of using the Tcl VFS is that it's possible to then use 'starkit'
+or simillar techniques to wrap everything that's needed for the webserver to run
+into a single distributable which is ready to run without any instalation.
+
+The disadvantage of using the Tcl VFS is that it's noticeably slower than
+using the native OS routines and it complicates the naviserver core to
+accommodate both mechanisms.
+
+See sample-config.tcl for setup details.

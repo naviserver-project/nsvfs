@@ -1,0 +1,105 @@
+
+
+
+<html><head>
+<title>nsvfs - Tcl VFS File Access </title>
+</head>
+<! -- Generated from file 'doc/src/mann/nsvfs.man' by tcllib/doctools with format 'html'
+   -->
+<! -- CVS: $Id$ nsvfs.n
+   -->
+
+<body>
+<h1> nsvfs(n) 0.1 nsvfs &quot;Tcl VFS File Access&quot;</h1>
+<h2><a name="name">NAME</a></h2>
+<p>
+<p> nsvfs - Replacement commands which use the Tcl VFS for file access.
+
+
+
+<h2><a name="table_of_contents">TABLE OF CONTENTS</a></h2>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#table_of_contents">TABLE OF CONTENTS</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#synopsis">SYNOPSIS</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#description">DESCRIPTION</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#commands">COMMANDS</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#see_also">SEE ALSO</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#keywords">KEYWORDS</a><br>
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+<p>
+<table border=1 width=100% cellspacing=0 cellpadding=0><tr            bgcolor=lightyellow><td bgcolor=lightyellow><table 0 width=100% cellspacing=0 cellpadding=0><tr valign=top ><td ><a href="#1"><b class='cmd'>vfs_register_fastpath</b> ?<strong>-noinherit</strong>? ?<i class='arg'>--</i>? <i class='arg'>method</i> <i class='arg'>url</i></a></td></tr>
+<tr valign=top ><td ><a href="#2"><b class='cmd'>vfs_returnfile</b> <i class='arg'>sttaus</i> <i class='arg'>mime-type</i> <i class='arg'>filepath</i></a></td></tr>
+<tr valign=top ><td ><a href="#3"><b class='cmd'>vfs_respond</b> ?<strong>-status <i class='arg'>status</i></strong>? ?<strong>-type <i class='arg'>mime-type</i></strong>? ?<strong>-length <i class='arg'>length</i></strong>? ?<strong>-headers <i class='arg'>setid</i></strong>? ?<strong>-string <i class='arg'>body</i></strong>? ?<strong>-binary <i class='arg'>body</i></strong>? ?<strong>-file <i class='arg'>filepath</i></strong>? ?<strong>-fileid <i class='arg'>channel</i></strong>?</a></td></tr>
+</table></td></tr></table>
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>
+nsvfs provides replacements for the builtin naviserver commands which access the
+file system to serve content. The commands here use the Tcl VFS.
+
+<p>
+Although slower, this is useful for creating single-file install images, such
+as <em>starkit</em>s.
+
+
+<h2><a name="commands">COMMANDS</a></h2>
+<p>
+<dl>
+
+
+
+<dt><a name="1"><b class='cmd'>vfs_register_fastpath</b> ?<strong>-noinherit</strong>? ?<i class='arg'>--</i>? <i class='arg'>method</i> <i class='arg'>url</i></a><dd>
+
+
+A replacement for the <b class='cmd'>ns_register_fastpath</b> command, using the Tcl VFS for
+file system access.
+
+<br><br>
+To ensure that all static content uses the Tcl VFS, replace the naviserver core
+fastpath handler by running the following code in your tcl library:
+
+<p><table><tr><td bgcolor=black>&nbsp;</td><td><pre class='sample'>
+<b class='cmd'>vfs_register_fastpath</b> GET /*
+<b class='cmd'>vfs_register_fastpath</b> HEAD /*
+<b class='cmd'>vfs_register_fastpath</b> POST /*
+</pre></td></tr></table></p>
+
+You may also decide to register the vfs routines for a subset of the URL
+hierarchy, such as /admin/*. In this case you could serve admin pages from
+within the starkit bundle and aditional static pages using the normal
+fastpath handler.
+
+
+
+
+<br><br>
+<dt><a name="2"><b class='cmd'>vfs_returnfile</b> <i class='arg'>sttaus</i> <i class='arg'>mime-type</i> <i class='arg'>filepath</i></a><dd>
+
+
+A replacement for the <b class='cmd'>ns_returnfile</b> command, using the Tcl VFS for file
+system access. No caching is performed.
+
+
+
+
+<br><br>
+<dt><a name="3"><b class='cmd'>vfs_respond</b> ?<strong>-status <i class='arg'>status</i></strong>? ?<strong>-type <i class='arg'>mime-type</i></strong>? ?<strong>-length <i class='arg'>length</i></strong>? ?<strong>-headers <i class='arg'>setid</i></strong>? ?<strong>-string <i class='arg'>body</i></strong>? ?<strong>-binary <i class='arg'>body</i></strong>? ?<strong>-file <i class='arg'>filepath</i></strong>? ?<strong>-fileid <i class='arg'>channel</i></strong>?</a><dd>
+
+
+A replacement for the <b class='cmd'>ns_respond</b> command, using the Tcl VFS for file
+system access. No caching is performed.
+
+
+</dl>
+
+
+
+
+
+
+
+<h2><a name="see_also">SEE ALSO</a></h2>
+<p>
+ns_register_fastpath, ns_respond, ns_returnfile
+<h2><a name="keywords">KEYWORDS</a></h2>
+<p>
+fastpath, file, vfs
+</body></html>
