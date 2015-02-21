@@ -36,10 +36,6 @@
 
 #include "vfs.h"
 
-NS_RCSID("@(#) $Header$");
-
-
-
 NS_EXPORT int Ns_ModuleVersion = 1;
 
 
@@ -119,8 +115,8 @@ Ns_ModuleInit(CONST char *server, CONST char *module)
      * Register introspection callbacks.
      */
 
-    Ns_RegisterProcInfo(InitInterp, "vfs:initinterp", NULL);
-    Ns_RegisterProcInfo(VFSFastget, "vfs:fastget", NULL);
+    Ns_RegisterProcInfo((Ns_Callback *)InitInterp, "vfs:initinterp", NULL);
+    Ns_RegisterProcInfo((Ns_Callback *)VFSFastget, "vfs:fastget", NULL);
     /* Ns_RegisterProcInfo(VFSAdpPage, "vfs:adppage", NULL); */
     /* Ns_RegisterProcInfo(VFSTclPage, "vfs:tclpage", NULL); */
     /* Ns_RegisterProcInfo(VFSPageMap, "vfs:onepage", VFSPageMapArgProc); */
@@ -129,9 +125,9 @@ Ns_ModuleInit(CONST char *server, CONST char *module)
 }
 
 static int
-InitInterp(Tcl_Interp *interp, void *arg)
+InitInterp(Tcl_Interp *interp, const void *arg)
 {
-    VFSConfig *cfg = arg;
+    VFSConfig *cfg = (VFSConfig *)arg;
     int         i;
 
     for (i = 0; i < (sizeof(cmds) / sizeof(cmds[0])); i++) {

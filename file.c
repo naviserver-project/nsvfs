@@ -39,9 +39,6 @@
 
 #include "vfs.h"
 
-NS_RCSID("@(#) $Header$");
-
-
 /*
  * Static functions defined in this file.
  */
@@ -291,7 +288,7 @@ int
 VFSFastget(void *arg, Ns_Conn *conn)
 {
     VFSConfig   *cfg = arg;
-    char        *url = conn->request->url;
+    const char  *url = conn->request->url;
     char        *type;
     Ns_DString   ds;
     int          status, result, i;

@@ -38,6 +38,3 @@
 
 #include "vfs.h"
 
-NS_RCSID("@(#) $Header$");
-
-
