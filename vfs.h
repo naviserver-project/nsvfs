@@ -40,6 +40,7 @@
 
 #include <ns.h>
 
+#define NSVFS_VERSION "0.2"
 
 /*
  * The following structure maintains configuration parameters.
@@ -47,13 +48,13 @@
 
 typedef struct VFSConfig {
 
-    CONST char  *server;
+    const char  *server;
 
     int          dirc;
-    CONST char **dirv;     /* Directory listing files. (index.html, ...) */
+    const char **dirv;     /* Directory listing files. (index.html, ...) */
 
-    CONST char  *diradp;   /* An ADP to list directories. */
-    CONST char  *dirproc;  /* A Tcl proc to list directories. */
+    const char  *diradp;   /* An ADP to list directories. */
+    const char  *dirproc;  /* A Tcl proc to list directories. */
 
 } VFSConfig;
 

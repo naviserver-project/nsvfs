@@ -43,11 +43,11 @@
  * Static functions defined in this file.
  */
 
-static int Stat(CONST char *path, Tcl_StatBuf *stPtr);
+static int Stat(const char *path, Tcl_StatBuf *stPtr);
 static int StatObj(Tcl_Obj *pathObj, Tcl_StatBuf *stPtr);
 
 static int Return(Ns_Conn *conn, int status,
-                  CONST char *type, CONST char *path,
+                  const char *type, const char *path,
                   Tcl_StatBuf *stPtr);
 
 
@@ -70,7 +70,7 @@ static int Return(Ns_Conn *conn, int status,
 
 int
 VFSRegisterFastpathObjCmd(ClientData arg, Tcl_Interp *interp, int objc,
-                           Tcl_Obj *CONST objv[])
+                           Tcl_Obj *const objv[])
 {
     VFSConfig  *cfg = arg;
     char       *method, *url;
@@ -117,8 +117,8 @@ VFSRegisterFastpathObjCmd(ClientData arg, Tcl_Interp *interp, int objc,
  */
 
 int
-VFSReturnFileObjCmd(ClientData arg, Tcl_Interp *interp, int objc,
-                    Tcl_Obj *CONST objv[])
+VFSReturnFileObjCmd(ClientData UNUSED(clientData), Tcl_Interp *interp, int objc,
+                    Tcl_Obj *const objv[])
 {
     Ns_Conn     *conn = Ns_GetConn();
     Tcl_StatBuf  st;
@@ -130,7 +130,7 @@ VFSReturnFileObjCmd(ClientData arg, Tcl_Interp *interp, int objc,
         return TCL_ERROR;
     }
     if (conn == NULL) {
-        Tcl_SetResult(interp, "no connection", TCL_STATIC);
+        Tcl_SetObjResult(interp, Tcl_NewStringObj("no connection", -1));
         return TCL_ERROR;
     }
 
@@ -171,12 +171,12 @@ VFSReturnFileObjCmd(ClientData arg, Tcl_Interp *interp, int objc,
  */
 
 int
-VFSRespondObjCmd(ClientData arg, Tcl_Interp *interp, int objc,
-                 Tcl_Obj *CONST objv[])
+VFSRespondObjCmd(ClientData UNUSED(clientData), Tcl_Interp *interp, int objc,
+                 Tcl_Obj *const objv[])
 {
     Ns_Conn     *conn;
     int          status = 200, length = -1;
-    char        *type = "*/*", *setid = NULL, *binary = NULL;
+    const char  *type = "*/*", *setid = NULL, *binary = NULL;
     char        *string = NULL, *chanid = NULL;
     Tcl_Obj     *pathObj = NULL;
     Ns_Set      *set = NULL;
@@ -200,14 +200,13 @@ VFSRespondObjCmd(ClientData arg, Tcl_Interp *interp, int objc,
     }
 
     if (chanid != NULL && length < 0) {
-        Tcl_SetResult(interp, "length required when -fileid is used",
-                      TCL_STATIC);
+        Ns_TclPrintfResult(interp, "length required when -fileid is used");
         return TCL_ERROR;
     }
     if ((binary != NULL) + (string != NULL) + (pathObj != NULL)
         + (chanid != NULL) != 1) {
-        Tcl_SetResult(interp, "must specify only one of -string, "
-                      "-file, -binary or -fileid", TCL_STATIC);
+        Ns_TclPrintfResult(interp, "must specify only one of -string, "
+                      "-file, -binary or -fileid");
         return TCL_ERROR;
     }
     if (setid != NULL) {
@@ -219,7 +218,7 @@ VFSRespondObjCmd(ClientData arg, Tcl_Interp *interp, int objc,
     }
     conn = Ns_GetConn();
     if (conn == NULL) {
-        Tcl_SetResult(interp, "no connection", TCL_STATIC);
+        Tcl_SetObjResult(interp, Tcl_NewStringObj("no connection", -1));
         return TCL_ERROR;
     }
     if (set != NULL) {
@@ -234,7 +233,7 @@ VFSRespondObjCmd(ClientData arg, Tcl_Interp *interp, int objc,
         if (Ns_TclGetOpenChannel(interp, chanid, 0, 1, &chan) != TCL_OK) {
             return TCL_ERROR;
         }
-        result = Ns_ConnReturnOpenChannel(conn, status, type, chan, length);
+        result = Ns_ConnReturnOpenChannel(conn, status, type, chan, (size_t)length);
 
     } else if (pathObj != NULL) {
         /*
@@ -284,15 +283,15 @@ VFSRespondObjCmd(ClientData arg, Tcl_Interp *interp, int objc,
  *----------------------------------------------------------------------
  */
 
-int
-VFSFastget(void *arg, Ns_Conn *conn)
+Ns_ReturnCode
+VFSFastget(const void *arg, Ns_Conn *conn)
 {
-    VFSConfig   *cfg = arg;
-    const char  *url = conn->request->url;
-    char        *type;
-    Ns_DString   ds;
-    int          status, result, i;
-    Tcl_StatBuf  st;
+    const VFSConfig *cfg = arg;
+    const char      *url = conn->request.url, *type;
+    Ns_DString       ds;
+    int              status, i;
+    Ns_ReturnCode    result;
+    Tcl_StatBuf      st;
 
     Ns_DStringInit(&ds);
 
@@ -374,7 +373,7 @@ VFSFastget(void *arg, Ns_Conn *conn)
  */
 
 static int
-Return(Ns_Conn *conn, int status, CONST char *type, CONST char *path,
+Return(Ns_Conn *conn, int status, const char *type, const char *path,
        Tcl_StatBuf *stPtr)
 {
     Tcl_Channel  channel;
@@ -400,7 +399,7 @@ Return(Ns_Conn *conn, int status, CONST char *type, CONST char *path,
                path, Tcl_ErrnoMsg(Tcl_GetErrno()));
         return Ns_ConnReturnNotFound(conn);
     }
-    result = Ns_ConnReturnOpenChannel(conn, 200, type, channel, stPtr->st_size);
+    result = Ns_ConnReturnOpenChannel(conn, status, type, channel, (size_t)stPtr->st_size);
     Tcl_Close(NULL, channel);
 
     return result;
@@ -424,7 +423,7 @@ Return(Ns_Conn *conn, int status, CONST char *type, CONST char *path,
  */
 
 static int
-Stat(CONST char *path, Tcl_StatBuf *stPtr)
+Stat(const char *path, Tcl_StatBuf *stPtr)
 {
     Tcl_Obj *pathObj;
     int      status;
@@ -454,3 +453,13 @@ StatObj(Tcl_Obj *pathObj, Tcl_StatBuf *stPtr)
     }
     return NS_OK;
 }
+
+
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 4
+ * fill-column: 78
+ * indent-tabs-mode: nil
+ * End:
+ */

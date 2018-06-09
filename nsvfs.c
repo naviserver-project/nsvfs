@@ -37,6 +37,7 @@
 #include "vfs.h"
 
 NS_EXPORT int Ns_ModuleVersion = 1;
+NS_EXPORT Ns_ModuleInitProc Ns_ModuleInit;
 
 
 /*
@@ -52,7 +53,7 @@ static Ns_TclTraceProc InitInterp;
  */
 
 static struct {
-    CONST char                 *name;
+    const char                 *name;
     Tcl_ObjCmdProc             *proc;
 } cmds[] = {
     {"vfs_register_fastpath",  VFSRegisterFastpathObjCmd},
@@ -78,15 +79,15 @@ static struct {
  */
 
 NS_EXPORT int
-Ns_ModuleInit(CONST char *server, CONST char *module)
+Ns_ModuleInit(const char *server, const char *module)
 {
     VFSConfig  *cfg;
-    CONST char *path, *p;
+    const char *path, *p;
 
     cfg = ns_malloc(sizeof(VFSConfig));
     cfg->server = server;
 
-
+    Ns_Log(Notice, "nslvfs: module %s version %s loaded", module, NSVFS_VERSION);
     /*
      * Inspect the fastpath configuration.
      */
@@ -128,9 +129,9 @@ static int
 InitInterp(Tcl_Interp *interp, const void *arg)
 {
     VFSConfig *cfg = (VFSConfig *)arg;
-    int         i;
+    size_t     i;
 
-    for (i = 0; i < (sizeof(cmds) / sizeof(cmds[0])); i++) {
+    for (i = 0u; i < (sizeof(cmds) / sizeof(cmds[0])); i++) {
         Tcl_CreateObjCommand(interp, cmds[i].name, cmds[i].proc, cfg, NULL);
     }
 
