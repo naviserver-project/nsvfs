@@ -4,7 +4,6 @@ Date:   2021-07-23
 
     modernize code
 
-M	ChangeLog
 M	nsvfs.c
 
 commit 6ca4f5dd354cc9cabb64b417b25d7f63893d6170
@@ -33,7 +32,6 @@ Date:   2008-08-22
 
     Initial revision
 
-A	ChangeLog
 A	Makefile
 A	README
 A	TODO
