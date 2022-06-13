@@ -1,0 +1,56 @@
+commit caf58bcb722eb3c480cfb3fcbcadf8422817efcb
+Author: Gustaf Neumann <neumann@wu-wien.ac.at>
+Date:   2021-07-23
+
+    modernize code
+
+M	ChangeLog
+M	nsvfs.c
+
+commit 6ca4f5dd354cc9cabb64b417b25d7f63893d6170
+Author: Gustaf Neumann <neumann@wu-wien.ac.at>
+Date:   2018-06-09
+
+    make module compilable with current versions of NaviServer
+
+M	file.c
+M	nsvfs.c
+M	vfs.h
+
+commit a900b14f1291bdcfdd61284e40906f15b36b7def
+Author: Gustaf Neumann <neumann@wu-wien.ac.at>
+Date:   2015-02-21
+
+    - modernize code
+
+M	adp.c
+M	file.c
+M	nsvfs.c
+
+commit 5bb19ef1bb486b50023b604cf9890f664fa0aeb8
+Author: Stephen Deasey <sdeasey@gmail.com>
+Date:   2008-08-22
+
+    Initial revision
+
+A	ChangeLog
+A	Makefile
+A	README
+A	TODO
+A	adp.c
+A	doc/html/nsvfs.html
+A	doc/man/nsvfs.nroff
+A	doc/src/mann/nsvfs.man
+A	file.c
+A	license.terms
+A	nsvfs.c
+A	sample-config.tcl
+A	tests/all.tcl
+A	tests/config.tcl
+A	tests/file.test
+A	tests/nsd.pid
+A	tests/server1/modules/testhttp.tcl
+A	tests/server1/pages/10bytes
+A	tests/server1/pages/fastpath/10bytes
+A	version_include.man
+A	vfs.h
